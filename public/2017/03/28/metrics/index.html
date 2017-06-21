@@ -1,0 +1,22 @@
+<!DOCTYPE html><html lang="zh-cn"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=Edge"><meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"><meta name="format-detection" content="telephone=no"><meta name="format-detection" content="email=no"><meta name="description" content="一个用了5年时间才刚刚入门的全栈工程师."><meta name="keywords" content="Python,Nodejs,Go,Flask"><title>metrics 数据监控系统之数据 - 猿@张寻</title><link rel="stylesheet" href="/css/main_style.css"><link rel="icon" href="/favicon.ico"></head><body><input id="navi" type="checkbox"><ul class="main-navication"><li><a href="/"><span>Home</span></a></li><li><a href="https://github.com/coder-van/"><span>Github</span></a></li><li><a href="/me"><span>简历</span></a></li><li><a href="/book"><span>阅读</span></a></li><li><a href="/film"><span>电影</span></a></li><li><a href="/other"><span>其他</span></a></li></ul><div class="wrapper" id="wrap"><div class="post-header"><label class="navi-button" for="navi">MENU</label><img class="background" src="http://callfiles.ueibo.com/hexo-theme-laughing/post_background.jpg"><div class="post-title"><h1 class="title">metrics 数据监控系统之数据</h1><ul class="meta"><li><i class="icon icon-author"></i>Coder Van</li><li><i class="icon icon-clock"></i>0 Minutes</li><li><i class="icon icon-calendar"></i>March 28, 2017</li></ul></div></div><div class="article-content" style="max-width:800px"><p>整个数据监控系统由 数据采集，数据聚合，数据缓存与存储，数据可视化和报警等几个模块构成。对于数据监控已经有很多优秀的开源软件，如Graphite,Grafana，StatsD等。但在寻求一种部署简单且轻量级的解决方案的过程中，发现还是很多地方很不如人意，比如Graphite部署复杂，文档不够丰富等，于是将一些开源代码进行了整理，简化原本复杂难懂或冗余的代码，用简单易懂的代码实现数据监控需求。</p>
+<p>了解数据监控,一定要先理解其统计数据的结构。统计数据分以下几种：</p>
+<ul>
+<li>gauge   刻度</li>
+<li>counter 技术器</li>
+<li>histogram 矩形图</li>
+<li>timer 计时器</li>
+</ul>
+<p><a href="https://github.com/rcrowley/go-metrics" target="_blank" rel="external">go-metrics</a>项目是一个非常优秀的metrics实现方案，用Go语言实现，Grafana的metrics就是直接使用了此项目的很多代码。</p>
+</div><div class="article-meta" style="max-width:800px"><div class="tags"><i class="icon icon-tag"></i><ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/metrics/">metrics</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/monitor/">monitor</a><span class="tag-list-count">2</span></li></ul></div><div class="categories"><i class="icon icon-category"></i><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/代码外的技术/">out-code</a><span class="category-list-count">8</span></li></ul></div></div><div class="article-comment" style="max-width:800px"><div class="ds-thread" id="ds-thread" data-thread-key="cj3qrt7fg000hjkr18o7ts9wq" data-title="metrics 数据监控系统之数据" data-url="http://coder-van.github.io/2017/03/28/metrics/" site-name="ueibo"></div><script>var siteName = document.getElementById('ds-thread').getAttribute('site-name');
+var duoshuoQuery = {short_name: siteName};
+(function() {
+  var ds = document.createElement('script');
+  ds.type = 'text/javascript';ds.async = true;
+  ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+  ds.charset = 'UTF-8';
+  (document.getElementsByTagName('head')[0] 
+  || document.getElementsByTagName('body')[0]).appendChild(ds);
+})();</script></div><ul class="navication"><li class="home"><a href="/"><i class="icon icon-home"></i></a></li><li><a href="/2017/03/28/tools/"><i class="icon icon-arror-left"></i></a></li><li><a href="/2017/03/22/team_scrum/"><i class="icon icon-arror-right"></i></a></li></ul><div class="page-footer"><div class="bottom"><p class="copyright">© 2017 猿@张寻<br><small>POWER BY &nbsp;<a href="https://hexo.io" target="_blank">HEXO</a></small><small>, THEME BY &nbsp;<a href="https://github.com/BoizZ/hexo-theme-laughing" target="_blank">LAUGHING</a></small></p></div></div></div><script>var wrap = document.getElementById('wrap');
+window.onload = function () {
+  wrap.className += ' done';
+}</script></body></html>

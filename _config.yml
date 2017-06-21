@@ -3,16 +3,16 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: 博客of张寻
-subtitle:
-description:
-author: Van
+title: 猿@张寻
+subtitle: 有血有肉 | 有趣有味 | 有意义
+description: 一个用了5年时间才刚刚入门的全栈工程师.
+author: Coder Van
 language:
 timezone:
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: http://yoursite.com
+url: http://coder-van.github.io
 root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
@@ -26,10 +26,12 @@ category_dir: categories
 code_dir: downloads/code
 i18n_dir: :lang
 skip_render:
+- archives
+- tags
 
 # Writing
 new_post_name: :title.md # File name of new posts
-default_layout: post
+default_layout: draft
 titlecase: false # Transform title into titlecase
 external_link: true # Open external links in new tab
 filename_case: 0
@@ -44,8 +46,15 @@ highlight:
   tab_replace:
 
 # Category & Tag
-default_category: uncategorized
+default_category: default
 category_map:
+  default: 未分类
+  code: 写代码
+  out-code:  代码外的技术
+  daily-record: 日常纪录
+  heart: 兴趣爱好
+  team: 团队
+
 tag_map:
 
 # Date / Time format
@@ -63,11 +72,11 @@ pagination_dir: page
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: maupassant
+theme: hexo-theme-laughing
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
-  repo:  https://github.com/Vanzct/Vanzct.github.io
+  repo:  git@github.com:coder-van/coder-van.github.io.git
   branch: master

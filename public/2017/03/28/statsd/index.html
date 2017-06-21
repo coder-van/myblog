@@ -1,0 +1,48 @@
+<!DOCTYPE html><html lang="zh-cn"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=Edge"><meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"><meta name="format-detection" content="telephone=no"><meta name="format-detection" content="email=no"><meta name="description" content="一个用了5年时间才刚刚入门的全栈工程师."><meta name="keywords" content="Python,Nodejs,Go,Flask"><title>StatsD - 猿@张寻</title><link rel="stylesheet" href="/css/main_style.css"><link rel="icon" href="/favicon.ico"></head><body><input id="navi" type="checkbox"><ul class="main-navication"><li><a href="/"><span>Home</span></a></li><li><a href="https://github.com/coder-van/"><span>Github</span></a></li><li><a href="/me"><span>简历</span></a></li><li><a href="/book"><span>阅读</span></a></li><li><a href="/film"><span>电影</span></a></li><li><a href="/other"><span>其他</span></a></li></ul><div class="wrapper" id="wrap"><div class="post-header"><label class="navi-button" for="navi">MENU</label><img class="background" src="http://callfiles.ueibo.com/hexo-theme-laughing/post_background.jpg"><div class="post-title"><h1 class="title">StatsD</h1><ul class="meta"><li><i class="icon icon-author"></i>Coder Van</li><li><i class="icon icon-clock"></i>4 Minutes</li><li><i class="icon icon-calendar"></i>March 28, 2017</li></ul></div></div><div class="article-content" style="max-width:800px"><h2 id="StatsD"><a href="#StatsD" class="headerlink" title="StatsD"></a>StatsD</h2><p>数据聚合器，接受数据，以固定的时间间隔对数据聚合，然后flush到graphite等数据服务。</p>
+<h4 id="数据接收器"><a href="#数据接收器" class="headerlink" title="数据接收器"></a>数据接收器</h4><ul>
+<li>UDP server 默认 8125端口</li>
+<li>TCP server 需要在config文件里配置</li>
+</ul>
+<h4 id="packet格式如下"><a href="#packet格式如下" class="headerlink" title="packet格式如下"></a>packet格式如下</h4><p>ex: key1:3|c|@.0.2\nkey2:-10|g 格式的数据packet</p>
+<p>key: [value]|[type]|[rate]:[value]|[type]|[rate]:…</p>
+<p>key: 对统计的值命名的键值</p>
+<p>value: 根据type不同有不同操作</p>
+<p>type: 技术器类型 c Counting 计数器 | ms Timer 计时器 | g Gauges 刻度计 | s 检测器； default=c</p>
+<p>rate: 计数速率 当type==c or g 时有效 如key:1|c|@0.2 则每次加5</p>
+<p>数据之间通过’\n’间隔</p>
+<h4 id="几种基本数据计数类型"><a href="#几种基本数据计数类型" class="headerlink" title="几种基本数据计数类型"></a>几种基本数据计数类型</h4><h2 id="Counter"><a href="#Counter" class="headerlink" title="Counter"></a>Counter</h2><p>计数器。flush后重置0，聚合后的数据为计数值和计数速率／秒</p>
+<p>计数公式：Metrics.countors[key] ＋= value * (1 / rate) 即default value=1 rate=1.0</p>
+<p>数据可以如下传递：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">key: 或者 key:1 或者 key:1|c 或者 key:+1|c|@1.0</div><div class="line"></div><div class="line">key:=-3|c|@0.1</div></pre></td></tr></table></figure></p>
+<h2 id="Gauge"><a href="#Gauge" class="headerlink" title="Gauge"></a>Gauge</h2><p>刻度计 记录最后一次的值</p>
+<p>当value 有+-符号： Metrics.gauges[key] ＋= value<br>否则： Metrics.gauges[key] = value<br>rate值无效</p>
+<p>数据可以如下传递：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">key:10|g</div><div class="line">key:+4|g|@0.1  @0.1会被忽略 不推荐对guage使用＋—，最好直接赋值</div></pre></td></tr></table></figure></p>
+<h2 id="Timer"><a href="#Timer" class="headerlink" title="Timer"></a>Timer</h2><p>计时器。计算平均值，差，和，最大最小，方差，均差，中间值，百分比队列。</p>
+<p>了解计时器需要先学习<a href="http://onlinestatbook.com/2/graphing_distributions/histograms.html" target="_blank" rel="external">histogram-直方图，矩型图</a></p>
+<p>Metrics.timers[key].push(value);  //defualt: value=0<br>Metrics.timer_counters[key] += (1/rate);  //defualt: rate=0</p>
+<p>数据可以如下传递：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">key:|ms|</div><div class="line">key:320|ms|@0.1</div></pre></td></tr></table></figure></p>
+<h2 id="Sets"><a href="#Sets" class="headerlink" title="Sets"></a>Sets</h2><p>Sets 记录出现过的value</p>
+<p>如果 value != 0<br>Metrics.sets[key][value]=true  // default value=0</p>
+<p>数据格式如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">key:765|s</div></pre></td></tr></table></figure></p>
+<h1 id="Metrics-统计数据"><a href="#Metrics-统计数据" class="headerlink" title="Metrics: 统计数据"></a>Metrics: 统计数据</h1><p>处理前的数据</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">counters = &#123;&#125;;</div><div class="line">timers = &#123;&#125;;</div><div class="line">timer_counters = &#123;&#125;;</div><div class="line">gauges = &#123;&#125;;</div><div class="line">sets = &#123;&#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h1 id="Backend-数据存储处理节点"><a href="#Backend-数据存储处理节点" class="headerlink" title="Backend 数据存储处理节点"></a>Backend 数据存储处理节点</h1><p>StatsD 从本地发送metrics数据到backend连接的服务, 默认graphite。</p>
+<p>StatsD 项目包含了以下backend类型</p>
+<ul>
+<li><a href="http://graphiteapp.org/" target="_blank" rel="external">Graphite</a> 提供web数据可视化的时间轴数据存储开源项目；</li>
+<li>Console 将数据输出到终端，便于开发调试；</li>
+<li>Repeater 使用 <code>packet</code> emit API 推送新数据到多backend的StatsD实例；</li>
+</ul>
+<h2 id="TODO"><a href="#TODO" class="headerlink" title="TODO"></a>TODO</h2><p>实现集群 充分利用多核<br>用不同语言实现，实现单语言完成数据收集和可视化</p>
+</div><div class="article-meta" style="max-width:800px"><div class="tags"><i class="icon icon-tag"></i><ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/StatsD/">StatsD</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据监控/">数据监控</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据聚合器/">数据聚合器</a><span class="tag-list-count">1</span></li></ul></div><div class="categories"><i class="icon icon-category"></i><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/代码外的技术/">out-code</a><span class="category-list-count">8</span></li></ul></div></div><div class="article-comment" style="max-width:800px"><div class="ds-thread" id="ds-thread" data-thread-key="cj3qrt7fp000wjkr1c9ry2ctx" data-title="StatsD" data-url="http://coder-van.github.io/2017/03/28/statsd/" site-name="ueibo"></div><script>var siteName = document.getElementById('ds-thread').getAttribute('site-name');
+var duoshuoQuery = {short_name: siteName};
+(function() {
+  var ds = document.createElement('script');
+  ds.type = 'text/javascript';ds.async = true;
+  ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+  ds.charset = 'UTF-8';
+  (document.getElementsByTagName('head')[0] 
+  || document.getElementsByTagName('body')[0]).appendChild(ds);
+})();</script></div><ul class="navication"><li class="home"><a href="/"><i class="icon icon-home"></i></a></li><li><a href="/2017/03/30/code_language/"><i class="icon icon-arror-left"></i></a></li><li><a href="/2017/03/28/tools/"><i class="icon icon-arror-right"></i></a></li></ul><div class="page-footer"><div class="bottom"><p class="copyright">© 2017 猿@张寻<br><small>POWER BY &nbsp;<a href="https://hexo.io" target="_blank">HEXO</a></small><small>, THEME BY &nbsp;<a href="https://github.com/BoizZ/hexo-theme-laughing" target="_blank">LAUGHING</a></small></p></div></div></div><script>var wrap = document.getElementById('wrap');
+window.onload = function () {
+  wrap.className += ' done';
+}</script></body></html>
