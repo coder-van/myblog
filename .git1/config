@@ -1,0 +1,15 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+	ignorecase = true
+	precomposeunicode = true
+[remote "origin"]
+	url = ssh://git@github.com/coder-van/coder-van.github.io.git
+	fetch = +refs/heads/*:refs/remotes/origin/*
+[user]
+	email = heidazhangchengtao@163.com
+[branch "master"]
+	remote = origin
+	merge = refs/heads/master
