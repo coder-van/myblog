@@ -41,3 +41,8 @@ if __name__ == "__main__":
 
 如何部署上线服务：
 通过 手动 ｜ 触发 ｜ 定时 ｜ tags
+
+Docs
+---
+[Gitlab CICD](https://docs.gitlab.com/ee/ci/README.html)
+[Gitlab Runner](https://docs.gitlab.com/runner/)
